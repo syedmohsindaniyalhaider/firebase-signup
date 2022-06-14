@@ -10,6 +10,7 @@ const App = () => {
   const [userExist, setUserExist] = useState(null);
   return (
     <>
+      <p>New App</p>
       <div className="outer-form">
         {!userExist && <h2 className="main-heading">Welcome to React Login</h2>}
         {userExist && <h2 className="main-heading">Welcome Home</h2>}
