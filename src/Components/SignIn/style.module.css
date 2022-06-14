@@ -1,0 +1,45 @@
+.outer-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f1f2f6;
+  padding: 20px;
+  height: 80vh;
+}
+
+.form {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 80px;
+}
+
+.button {
+  background-color: #2f3542;
+  color: white;
+  padding: 10px 15px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+.invalid {
+  border: 1px solid red !important;
+}
+
+.valid {
+  display: none;
+}
+
+.not-valid {
+  display: block;
+  color: red;
+}
+.form-valid {
+  display: block;
+}
+
+.form-head {
+  margin-bottom: 10px;
+  text-align: center;
+}

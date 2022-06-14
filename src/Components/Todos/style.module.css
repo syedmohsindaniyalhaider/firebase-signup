@@ -1,0 +1,29 @@
+.list {
+  list-style-type: none;
+}
+
+.items {
+  background-color: white;
+  text-align: center;
+  margin-bottom: 5px;
+  width: 400px;
+  padding: 15px;
+  border-radius: 5px;
+}
+.items:hover {
+  border: 1px solid black;
+}
+
+.line {
+  text-decoration: line-through;
+}
+
+.check {
+  margin-left: 10px;
+  background-color: wheat;
+  padding: 2px 10px;
+  border-radius: 5px;
+}
+.check:hover {
+  cursor: pointer;
+}

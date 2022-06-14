@@ -1,0 +1,32 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.outer-form {
+  background-color: #f1f2f6;
+  padding: 20px;
+}
+
+.main-heading {
+  text-align: center;
+}
+
+.center {
+  text-align: center;
+}
+
+.group-btn {
+  margin-top: 20px;
+}
+.btn {
+  padding: 10px 20px;
+  border: 1px solid black;
+}
+.btn:nth-child(1) {
+  border-right: none;
+}
+.btn:nth-child(2) {
+  border-left: none;
+}
