@@ -23,12 +23,13 @@ const App = () => {
             </button>
           </div>
         )}
+
+        {layout && <SignUp />}
+        {!layout && !userExist && (
+          <SignIn userExist={userExist} setUserExist={setUserExist} />
+        )}
+        {userExist && <Home />}
       </div>
-      {layout && <SignUp />}
-      {!layout && !userExist && (
-        <SignIn userExist={userExist} setUserExist={setUserExist} />
-      )}
-      {userExist && <Home />}
     </>
   );
 };

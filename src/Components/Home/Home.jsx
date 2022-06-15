@@ -22,7 +22,7 @@ const Home = (props) => {
     );
   };
 
-  const getAllTodos = useCallback(async () => {
+  const getAllTodos = async () => {
     setLoading(true);
     setError(null);
     try {
@@ -33,31 +33,30 @@ const Home = (props) => {
         throw new Error("Something went Wrong!");
       }
       const data = await res.json();
-      console.log(data);
       const loadedTodos = [];
       for (const key in data) {
-        console.log("Todos:", data[key]?.text);
         loadedTodos.push({
           id: key,
           text: data[key]?.text,
+          isCompleted: data[key]?.isCompleted,
         });
       }
-      console.log("Todos ::", loadedTodos);
       setTodos(loadedTodos);
     } catch (err) {
       setError(err.message);
     }
     setLoading(false);
-  }, []);
+  };
 
   useEffect(() => {
     getAllTodos();
-  }, [getAllTodos]);
+  }, []);
 
   const handleClick = (e) => {
     e.preventDefault();
     const newTodo = {
       text: todo,
+      isCompleted: false,
     };
     addTodo(newTodo);
     setTodo("");

@@ -1,69 +1,56 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import styles from "./style.module.css";
 import Input from "../../UI/Input";
+import useInput from "../../Hooks/useInput";
 
 const SignUpForm = (props) => {
-  const [firstName, setFirstName] = useState("");
-  const [firstNameValid, setFirstNameValid] = useState(null);
-  const [lastName, setLastName] = useState("");
-  const [lastNameValid, setLastNameValid] = useState(null);
-  const [password, setPassword] = useState("");
-  const [passwordValid, setPasswordValid] = useState(null);
-  const [email, setEmail] = useState("");
-  const [emailValid, setEmailValid] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [confirmPasswordValid, setConfirmPasswordValid] = useState(null);
-  const firstNameRef = useRef();
-  const lastNameRef = useRef();
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const confirmPasswordRef = useRef();
+  const {
+    value: firstName,
+    hasError: firstNameHasError,
+    isValid: firstNameIsValid,
+    inputChangeHandler: firstNameChangeHandler,
+    inputBlurHandler: firstNameBlurHandler,
+    reset: resetFirstName,
+  } = useInput((value) => value.trim() !== "");
+  const {
+    value: lastName,
+    hasError: lastNameHasError,
+    isValid: lastNameIsValid,
+    inputChangeHandler: lastNameChangeHandler,
+    inputBlurHandler: lastNameBlurHandler,
+    reset: resetLastName,
+  } = useInput((value) => value.trim() !== "");
+  const {
+    value: email,
+    hasError: emailHasError,
+    isValid: emailIsValid,
+    inputChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+    reset: resetEmail,
+  } = useInput((value) => value.trim().includes("@"));
+  const {
+    value: password,
+    hasError: passwordHasError,
+    isValid: passwordIsValid,
+    inputChangeHandler: passwordChangeHandler,
+    inputBlurHandler: passwordBlurHandler,
+    reset: resetPassword,
+  } = useInput((value) => value.trim() !== "");
+  const {
+    value: confirmPassword,
+    hasError: confirmPasswordHasError,
+    isValid: confirmPasswordIsValid,
+    inputChangeHandler: confirmPasswordChangeHandler,
+    inputBlurHandler: confirmPasswordBlurHandler,
+    reset: resetConfirmPassword,
+  } = useInput((value) => value.trim() !== "");
 
   let formIsValid =
-    firstNameValid &&
-    lastNameValid &&
-    passwordValid &&
-    emailValid &&
-    confirmPasswordValid;
-
-  const firstNameValidity = () => {
-    if (firstNameRef.current.value !== "") {
-      setFirstNameValid(true);
-    } else {
-      setFirstNameValid(false);
-    }
-  };
-  const lastNameValidity = () => {
-    if (lastNameRef.current.value !== "") {
-      setLastNameValid(true);
-    } else {
-      setLastNameValid(false);
-    }
-  };
-  const passwordValidity = () => {
-    if (passwordRef.current.value !== "") {
-      setPasswordValid(true);
-    } else if (email.includes("@")) {
-      setPasswordValid(true);
-    } else {
-      setPasswordValid(false);
-    }
-  };
-  const emailValidity = () => {
-    if (emailRef.current.value !== "") {
-      setEmailValid(true);
-    } else {
-      setEmailValid(false);
-    }
-  };
-  const confirmPasswordValidity = () => {
-    if (confirmPasswordRef.current.value !== "") {
-      setConfirmPasswordValid(true);
-    } else {
-      setConfirmPasswordValid(false);
-    }
-  };
-
+    firstNameIsValid &&
+    lastNameIsValid &&
+    emailIsValid &&
+    passwordIsValid &&
+    confirmPasswordIsValid;
   const submitHandler = (e) => {
     e.preventDefault();
     const userDetails = {
@@ -74,11 +61,11 @@ const SignUpForm = (props) => {
       confirmPassword: confirmPassword,
     };
     props.addUser(userDetails);
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
+    resetFirstName();
+    resetLastName();
+    resetEmail();
+    resetPassword();
+    resetConfirmPassword();
   };
   return (
     <>
@@ -86,112 +73,97 @@ const SignUpForm = (props) => {
         <form className={styles.form} onSubmit={submitHandler}>
           <h2 className={styles["form-head"]}>Sign Up</h2>
           <Input
-            ref={firstNameRef}
             label="First Name"
             name="firstname"
             value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            onBlur={firstNameValidity}
-            className={firstNameValid === false ? styles.invalid : ""}
+            onChange={firstNameChangeHandler}
+            onBlur={firstNameBlurHandler}
+            className={firstNameHasError === true ? styles.invalid : ""}
           />
           <span
             className={
-              firstNameValid === false ? styles["not-valid"] : styles.valid
+              firstNameHasError === true ? styles["not-valid"] : styles.valid
             }
           >
-            Not Valid
+            Enter a valid name.
           </span>
           <Input
-            ref={lastNameRef}
             label="Last Name"
             name="lastname"
             value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            onBlur={lastNameValidity}
-            className={lastNameValid === false ? styles.invalid : ""}
+            onChange={lastNameChangeHandler}
+            onBlur={lastNameBlurHandler}
+            className={lastNameHasError === true ? styles.invalid : ""}
           />
           <span
             className={
-              lastNameValid === false ? styles["not-valid"] : styles.valid
+              lastNameHasError === true ? styles["not-valid"] : styles.valid
             }
           >
-            Not Valid
+            Enter a valid name.
           </span>
           <Input
-            ref={emailRef}
             label="Email"
             name="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={emailValidity}
-            className={
-              emailValid === false || (email.length > 0 && !email.includes("@"))
-                ? styles.invalid
-                : ""
-            }
+            onChange={emailChangeHandler}
+            onBlur={emailBlurHandler}
+            className={emailHasError === true ? styles.invalid : ""}
           />
           <span
             className={
-              emailValid === false || (email.length > 0 && !email.includes("@"))
-                ? styles["not-valid"]
-                : styles.valid
+              emailHasError === true ? styles["not-valid"] : styles.valid
             }
           >
-            Not Valid
+            Enter a valid email.
           </span>
           <Input
-            ref={passwordRef}
             label="Password"
             name="password"
             value={password}
             type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            onBlur={passwordValidity}
-            className={passwordValid === false ? styles.invalid : ""}
+            onChange={passwordChangeHandler}
+            onBlur={passwordBlurHandler}
+            className={passwordHasError === true ? styles.invalid : ""}
           />
           <span
             className={
-              passwordValid === false ? styles["not-valid"] : styles.valid
+              passwordHasError === true ? styles["not-valid"] : styles.valid
             }
           >
-            Not Valid
+            Enter a valid password.
           </span>
           <Input
-            ref={confirmPasswordRef}
             label="Confirm Password"
             name="confirmpassword"
             value={confirmPassword}
             type="password"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            onBlur={confirmPasswordValidity}
-            className={confirmPasswordValid === false ? styles.invalid : ""}
+            onChange={confirmPasswordChangeHandler}
+            onBlur={confirmPasswordBlurHandler}
+            className={confirmPasswordHasError === true ? styles.invalid : ""}
           />
           <span
             className={
-              confirmPasswordValid === false
+              confirmPasswordHasError === true
                 ? styles["not-valid"]
                 : styles.valid
             }
           >
-            Not Valid
+            Enter a valid password.
           </span>
           <div>
             <button
               className={styles.button}
-              disabled={
-                formIsValid === null || formIsValid === false ? true : false
-              }
+              disabled={formIsValid === false ? true : false}
             >
               Sign Up
             </button>
             <span
               className={
-                formIsValid === null || formIsValid === false
-                  ? styles["not-valid"]
-                  : styles.valid
+                formIsValid === false ? styles["not-valid"] : styles.valid
               }
             >
-              Please enter details.
+              Please enter all the details.
             </span>
           </div>
         </form>

@@ -1,104 +1,101 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import styles from "./style.module.css";
 import Input from "../../UI/Input";
+import useInput from "../../Hooks/useInput";
 
 const SignInForm = ({
-  email,
-  password,
-  setEmail,
-  setPassword,
+  setUserEmail,
+  setUserPassword,
   loadUsers,
   userExist,
   loading,
   error,
 }) => {
-  const [emailValid, setEmailValid] = useState(null);
-  const [passwordValid, setPasswordValid] = useState(null);
-  const emailRef = useRef();
-  const passwordRef = useRef();
+  const {
+    value: email,
+    hasError: emailHasError,
+    isValid: emailIsValid,
+    inputChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+    reset: resetEmail,
+  } = useInput((value) => value.trim().includes("@"));
+  const {
+    value: password,
+    hasError: passwordHasError,
+    isValid: passwordIsValid,
+    inputChangeHandler: passwordChangeHandler,
+    inputBlurHandler: passwordBlurHandler,
+    reset: resetPassword,
+  } = useInput((value) => value.trim() !== "");
 
-  let formIsValid = passwordValid && emailValid;
-
-  const passwordValidity = () => {
-    if (passwordRef.current.value !== "") {
-      setPasswordValid(true);
-    } else if (email.includes("@")) {
-      setPasswordValid(true);
-    } else {
-      setPasswordValid(false);
-    }
-  };
-  const emailValidity = () => {
-    if (emailRef.current.value !== "") {
-      setEmailValid(true);
-    } else {
-      setEmailValid(false);
-    }
-  };
+  let formIsValid = emailIsValid && passwordIsValid;
 
   const submitHandler = (e) => {
     e.preventDefault();
+    console.log(email);
     loadUsers();
-    setEmail("");
-    setPassword("");
+    resetEmail();
+    resetPassword();
   };
   return (
     <div className={styles["outer-form"]}>
       <form className={styles.form} onSubmit={submitHandler}>
         <h2 className={styles["form-head"]}>Sign In</h2>
         <Input
-          ref={emailRef}
           label="Email"
           name="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          onBlur={emailValidity}
-          className={
-            emailValid === false || (email.length > 0 && !email.includes("@"))
-              ? styles.invalid
-              : ""
-          }
+          onChange={(e) => {
+            setUserEmail(e.target.value);
+            emailChangeHandler(e);
+          }}
+          onBlur={emailBlurHandler}
+          className={emailHasError === true ? styles.invalid : ""}
         />
         <span
           className={
-            emailValid === false || (email.length > 0 && !email.includes("@"))
-              ? styles["not-valid"]
-              : styles.valid
+            emailHasError === true ? styles["not-valid"] : styles.valid
           }
         >
-          Not Valid
+          Enter a valid email.
         </span>
         <Input
-          ref={passwordRef}
           label="Password"
           name="password"
           value={password}
           type="password"
-          onChange={(e) => setPassword(e.target.value)}
-          onBlur={passwordValidity}
-          className={passwordValid === false ? styles.invalid : ""}
+          onChange={(e) => {
+            setUserPassword(e.target.value);
+            passwordChangeHandler(e);
+          }}
+          onBlur={passwordBlurHandler}
+          className={passwordHasError === true ? styles.invalid : ""}
         />
         <span
           className={
-            passwordValid === false ? styles["not-valid"] : styles.valid
+            passwordHasError === true ? styles["not-valid"] : styles.valid
           }
         >
-          Not Valid
+          Enter a valid password.
         </span>
         <div>
-          <button className={styles.button}>Sign In</button>
-        </div>
-        {
-          <span
-            className={
-              formIsValid === null || formIsValid === false
-                ? styles["form-valid"]
-                : styles.valid
-            }
+          <button
+            className={styles.button}
+            disabled={formIsValid === false ? true : false}
           >
-            Enter details to Login.
-          </span>
-        }
+            Sign In
+          </button>
+        </div>
+
+        <span
+          className={
+            formIsValid === false && !loading
+              ? styles["form-valid"]
+              : styles.valid
+          }
+        >
+          Enter details to Login.
+        </span>
         {!loading && !userExist && userExist !== null && (
           <span>User not found!</span>
         )}

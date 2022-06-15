@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import SignInForm from "./SignInForm";
 
 const SignIn = (props) => {
-  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   const loadUsers = async () => {
     setLoading(true);
@@ -28,13 +27,10 @@ const SignIn = (props) => {
         });
       }
       const matchUser = loadedUsers.filter(
-        (user) => user.email === email && user.password === password
+        (user) => user.email === userEmail && user.password === userPassword
       );
-
       const boolUserMatch = matchUser.length > 0 ? true : false;
-
       props.setUserExist(boolUserMatch);
-      setUsers(loadedUsers);
     } catch (err) {
       setError(err.message);
     }
@@ -42,10 +38,8 @@ const SignIn = (props) => {
   };
   return (
     <SignInForm
-      email={email}
-      password={password}
-      setEmail={setEmail}
-      setPassword={setPassword}
+      setUserPassword={setUserPassword}
+      setUserEmail={setUserEmail}
       loadUsers={loadUsers}
       userExist={props.userExist}
       loading={loading}

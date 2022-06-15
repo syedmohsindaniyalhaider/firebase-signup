@@ -3,15 +3,14 @@
 }
 
 .items {
+  display: flex;
+  justify-content: space-between;
   background-color: white;
   text-align: center;
   margin-bottom: 5px;
-  width: 400px;
+  width: 300px;
   padding: 15px;
   border-radius: 5px;
-}
-.items:hover {
-  border: 1px solid black;
 }
 
 .line {
@@ -20,10 +19,12 @@
 
 .check {
   margin-left: 10px;
-  background-color: wheat;
+  background-color: #EB4174;
+  color: white;
   padding: 2px 10px;
   border-radius: 5px;
 }
 .check:hover {
   cursor: pointer;
+  background-color: #e6376c;
 }
